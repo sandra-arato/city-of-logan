@@ -1,0 +1,33 @@
+{
+  "name": "city-of-logan",
+  "version": "0.1.0",
+  "description": "Mapping live data to Logan's suburbs",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sandra-arato/city-of-logan.git"
+  },
+  "keywords": [
+    "open",
+    "data",
+    "express",
+    "node.js",
+    "api"
+  ],
+  "author": "Sandra Arato",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sandra-arato/city-of-logan/issues"
+  },
+  "homepage": "https://github.com/sandra-arato/city-of-logan#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "google-alerts-api": "^0.2.3",
+    "google-trends-api": "^4.7.0",
+    "https-proxy-agent": "^2.2.1",
+    "rss-parser": "^3.4.3"
+  }
+}

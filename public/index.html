@@ -5,23 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Logan city live feed</title>
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,300,700' rel='stylesheet' type='text/css'>
-    <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="spectre.min.css">
+    <link rel="stylesheet" href="spectre-exp.min.css">
+    <link rel="stylesheet" href="spectre-icons.min.css">
     <link href="main.css" rel="stylesheet">
+    <script src="Chart.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
-
-    <header>
-      <h1 class="title centered">Logan city live feed</h1>
+    <header class="header">
+      <h1 class="title">Logan City</h1>
+      <p>live feed</p>
     </header>
 
     <main>
-      <div class="posts ">
+      <section>
         <h2>Suburbs</h2>
-        <div class="post-container"></div>
-        <div class="clearfix"></div>
-      </div>
-
+        <ul id="suburbs" class="list"><ul>
+      </section>
+      <canvas id="myChart" width="400" height="400"></canvas>
     </main>
     <script src="main.js" type="text/javascript"></script>
   </body>

@@ -13,18 +13,24 @@
     <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
-    <header class="header">
-      <h1 class="title">Logan City</h1>
-      <p>live feed</p>
-    </header>
-
-    <main>
+    <main class="main">
+      <header class="header">
+        <h1 class="title">Logan City Live Feed</h1>
+        <p></p>
+      </header>
       <section>
-        <h2>Suburbs</h2>
         <ul id="suburbs" class="list"><ul>
       </section>
-      <canvas id="myChart" width="400" height="400"></canvas>
+      <canvas id="myChart" width="800" height="500"></canvas>
     </main>
+    <aside>
+      <h2 class="title">Recent activity</h2>
+      <div id="feed">
+      </div>
+      <footer>
+        <input type="text" />
+      </footer>
+    </aside>
     <script src="main.js" type="text/javascript"></script>
   </body>
 </html>

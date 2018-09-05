@@ -1,10 +1,38 @@
 body {
 	box-sizing: border-box;
+	font-size: 16px;
+	display: flex;
+	justify-content: space-between;
+}
+canvas {
+	font-family: "SF Mono", "Segoe UI Mono", "Roboto Mono", Menlo, Courier, monospace;
+}
+.main {
+	box-sizing: border-box;
+	padding: 0 1.5rem 0 1rem;
+	flex-direction: column;
+	flex-grow: 1;
+	margin-right: auto;
+	background: #fbfbfb;
+	border-right: 1px solid #efefef;
+	min-height: 100vh;
 }
 
 .header {
-	background: #ededed;
+	display: block;
+	width: 100%;
 	padding: 1.5rem 1rem 0.5rem;
+}
+
+.title{
+	font-size: 0.75rem;
+	font-weight: 300;
+}
+
+.header p {
+	font-size: 2.5rem;
+	line-height: 1.25;
+	margin-bottom: 0;
 }
 
 
@@ -16,4 +44,88 @@ body {
 
 .list li span {
 	colour: orange;
+}
+
+aside {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+	width: 15rem;
+	padding: 1.25rem 0 3rem 0.75rem;
+	max-height: calc(100vh - 2rem);
+	overflow-y: auto;
+}
+aside > :first-child {
+	margin-bottom: 1.5rem;
+}
+
+footer {
+	position: fixed;
+	box-sizing: border-box;
+	bottom: 0;
+	right: 0;
+	width: 15rem;
+	height: 3rem;
+	padding: 1rem;
+}
+
+input {
+	width: 100%;
+	border: none;
+	border-bottom: 2px solid #acacac;
+}
+
+input:focus,
+input:active {
+	outline: none;
+	border-bottom: 2px solid #575858;
+}
+
+
+
+.news {
+	box-shadow: -0.25rem 0 1.55rem 0 rgba(220, 218, 220, 0.5);
+	border-left: 0.5rem solid transparent;
+	border-radius: 0.25rem 0 0 0.25rem;
+	line-height: 1.25;
+	padding: 0.5rem;
+	padding-right: 1rem;
+	margin-bottom: 1rem;
+}
+
+.news.positive {
+	border-color: rgba(54, 162, 235, 1);
+}
+.news.neutral {
+	border-color: rgba(120, 214, 120, 1);
+}
+.news.negative {
+	border-color: rgba(243, 205, 20, 1);
+}
+.news.traffic {
+	border-color: rgba(247, 82, 20, 1);
+}
+.news.search {
+	border-color: rgba(74, 84, 175, 1);
+}
+
+
+.news h3 {
+	font-size: 0.75rem;
+}
+
+.news p {
+	color: #575858;
+	font-weight: 300;
+	font-size: 0.75rem;
+	margin-bottom: 0.5rem;
+}
+
+.news p:last-child {
+	display: flex;
+	justify-content: space-between;
+	color: #c3c7c7;
+	margin-bottom: 0;
+	margin-top: 0.5rem;
 }

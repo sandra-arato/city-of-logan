@@ -38,12 +38,11 @@ const trends = new Promise((resolve, reject) => {
     const counter = suburbs.length;
     const keywords = {};
     const now = new Date();
-    // get search results from the last hour
-    const time = new Date(now.getTime() - (1000*60*60));
-
+    // get search results from the last 2 hours
+    const time = new Date(now.getTime() - (2000*60*60));
+    console.log(`Fetching search data since ${time.getHours()}:${time.getMinutes()}`);
     for (let i = counter; i > -1; i--) {
       const suburb = suburbs[i];
-      console.log(`${counter - i} / ${counter}`);
       const result = setTimeout(getTrends, i * 250, suburb, time, (res) => {
         const trend = JSON.parse(res).default.rankedList;
         const words = [];

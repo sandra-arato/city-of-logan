@@ -19,30 +19,57 @@ const io = require('socket.io').listen(server);  //pass a http.Server instance
 server.listen(3000);  //listen on port 3000
 app.use(express.static('public'));
 
+const fetchPerMinute = 5;
+let fetched = false;
+const fetchData = () => setInterval(() => {
+  trends.then((res) => {
+    console.log('search data fetched');
+    io.sockets.emit('search', { suburbs: res });
+    fetched = true;
+    return fetched;
+  });
+  news.then((results) => {
+    const news = processNews(results);
+    console.log('news processed');
+    io.sockets.emit('news', { suburbs: news });
+    fetched = true;
+    return fetched;
+  });
+  traffic.then((resTraffic) => {
+    console.log('traffic data fetched');
+    io.sockets.emit('traffic', { traffic: resTraffic });
+    fetched = true;
+    return fetched;
+  });
+}, 1000* 60 * 1 / fetchPerMinute);
 
 io.on('connection', function (socket) {
   getSuburbs(data => {
     console.log('socket on');
+
     const suburbs = JSON.parse(data).suburb;
     const counter = suburbs.length;
     socket.emit('search', { suburbs: suburbs });
-    trends.then((res) => {
-      // console.log('data', res);
-      socket.emit('search', { suburbs: res });
+
+    if (!fetched) {
+      fetchData();
+    }
+
+    socket.on('disconnect', () => {
+       clearInterval(fetchData);
     });
-    news.then((results) => {
-      const news = processNews(results);
-      console.log('news processed');
-      socket.emit('news', { suburbs: news });
-    });
-    traffic.then((resTraffic) => {
-      console.log('traffic data');
-      console.log(resTraffic);
-      socket.emit('traffic', { traffic: resTraffic });
-    });
-    // console.log(JSON.parse(trend));
-  // socket.on('my other event', function (data) {
-  //   console.log(data);
+
+    // socket.on('connect', fetchData);
+
+
+
+    // var fetch = setInterval(fetchData, 1000* 60 * 1 / fetchPerMinute);
+    // socket.on('disconnect', function () {
+    //  clearInterval(fetch);
+    // });
+
+    // fetchData();
+    // setInterval(fetchData, 1000* 60 * 1 / fetchPerMinute);
   });
 });
 

@@ -15,11 +15,12 @@ const arrayOf69 = () => {
 const state = {
   labels: [],
   search: [],
-  positive: arrayOf69(),
-  neutral: arrayOf69(),
-  negative: arrayOf69(),
-  search: arrayOf69(),
-  traffic: arrayOf69(),
+  positive: [],
+  neutral: [],
+  negative: [],
+  search: [],
+  traffic: [],
+  chart: null,
 };
 
 function listSuburbs(subs) {
@@ -70,7 +71,7 @@ function insertNews(newsArray) {
       div.classList.add('news', className);
       div.innerHTML = itemHtml;
       feed.insertBefore(div, feed.firstElementChild);
-      return div;
+      // return div;
     }
     if (item.type) {
       const itemHtml = `
@@ -85,7 +86,7 @@ function insertNews(newsArray) {
       div.classList.add('news', 'traffic');
       div.innerHTML = itemHtml;
       feed.insertBefore(div, feed.firstElementChild);
-      return div;
+      // return div;
     }
     if (item.search) {
       const itemHtml = `
@@ -100,68 +101,100 @@ function insertNews(newsArray) {
       div.classList.add('news', 'search');
       div.innerHTML = itemHtml;
       feed.insertBefore(div, feed.firstElementChild);
-      return div;
+      // return div;
     }
   })
   return items;
 }
 
 function drawChart() {
-  var ctx = document.getElementById("myChart").getContext('2d');
-  const randomPositive = () => {
-    return Math.floor(Math.random() * 7);
-  };
-  var barChartData = {
-    labels: state.labels,
-    datasets: [{
-      label: 'Search events',
-      backgroundColor: 'rgba(74, 84, 175, 1)',
-      data: arrayOf69(),
-    },{
-      label: 'Good news',
-      backgroundColor: 'rgba(54, 162, 235, 1)',
-      data: state.positive,
-    }, {
-      label: 'Neutral news',
-      backgroundColor: 'rgba(120, 214, 120, 1)',
-      data: state.neutral,
-    }, {
-      label: 'Bad news',
-      backgroundColor: 'rgba(243, 205, 20, 1)',
-      data: state.negative,
-    }, {
-      label: 'Traffic events',
-      backgroundColor: 'rgba(247, 82, 20, 1)',
-      data: state.traffic,
-    }]
-  };
+  if (!state.chart) {
+    const ctx = document.getElementById("myChart").getContext('2d');
+    var barChartData = {
+      labels: state.labels,
+      datasets: [{
+        label: 'Search events',
+        backgroundColor: 'rgba(74, 84, 175, 1)',
+        data: state.search,
+      },{
+        label: 'Good news score',
+        backgroundColor: 'rgba(54, 162, 235, 1)',
+        data: state.positive,
+      }, {
+        label: 'Neutral news score',
+        backgroundColor: 'rgba(120, 214, 120, 1)',
+        data: state.neutral,
+      }, {
+        label: 'Bad news score',
+        backgroundColor: 'rgba(243, 205, 20, 1)',
+        data: state.negative,
+      }, {
+        label: 'Traffic events',
+        backgroundColor: 'rgba(247, 82, 20, 1)',
+        data: state.traffic,
+      }]
+    };
+    state.chart = new Chart(ctx, {
+      type: 'bar',
+      data: barChartData,
+      options: {
+        title: {
+          display: false,
+          text: 'Live events in Logan City',
+          fontFamily: ' "SF Mono", "Segoe UI Mono", "Roboto Mono", Menlo, Courier, monospace',
+        },
+        legend: {
+          labels: {
+            boxWidth: 32,
+            fontFamily: ' "SF Mono", "Segoe UI Mono", "Roboto Mono", Menlo, Courier, monospace',
+          },
+        },
+        ticks: {
+          autoSkip: false,
+        },
+        tooltips: {
+          mode: 'index',
+          intersect: false,
+        },
+        hover: {
+          mode: false,
+        },
+        responsive: true,
+        scales: {
+          xAxes: [{
+            stacked: true,
+            fontFamily: ' "SF Mono", "Segoe UI Mono", "Roboto Mono", Menlo, Courier, monospace',
+          }],
+          yAxes: [{
+            stacked: true,
+            fontFamily: ' "SF Mono", "Segoe UI Mono", "Roboto Mono", Menlo, Courier, monospace',
+            label: 'Number of Events',
+          }]
+        }
+      },
+    });
+  } else {
+    // console.log('popping empty values from chart', state);
+    // if (state && state.labels) {
+    //   for (let i = 0; i < state.labels.length; i++) {
+    //     const { positive, negative, search, neutral, traffic } = state;
+    //     console.log(state.labels[i]);
+    //     // if (!positive[i] && !negative[i] && !search[i] &&  !neutral[i] && !traffic[i]) {
+    //     //   console.log(`${state.labels[i]} has no data`);
+    //     //   state.labels.splice(i, 1);
+    //     //   positive.splice(i, 1);
+    //     //   negative.splice(i, 1);
+    //     //   neutral.splice(i, 1);
+    //     //   search.splice(i, 1);
+    //     //   traffic.splice(i, 1);
+    //     // }
+    //   }
+    // }
+    console.log('data in graph', state);
 
-  var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: barChartData,
-    options: {
-      title: {
-        display: false,
-        text: 'Chart.js Bar Chart - Stacked'
-      },
-      ticks: {
-        autoSkip: false,
-      },
-      tooltips: {
-        mode: 'index',
-        intersect: false,
-      },
-      responsive: true,
-      scales: {
-        xAxes: [{
-          stacked: true,
-        }],
-        yAxes: [{
-          stacked: true
-        }]
-      }
-    },
-  });
+    state.chart.clear();
+    state.chart.update();
+  }
 }
 
 function ready () {
@@ -179,27 +212,33 @@ function ready () {
             // update graph
             const positive = (accumulator, currentValue) => {
               if (currentValue.result.score > 0) {
-                return accumulator + currentValue.result.score;
+                return accumulator + currentValue.result.comparative;
               }
-              return 0;
+              return accumulator;
             }
             const negative = (accumulator, currentValue) => {
               if (currentValue.result.score < 0) {
-                return accumulator + currentValue.result.score;
+                console.log(currentValue);
+                return accumulator + currentValue.result.comparative ;
               }
-              return 0;
+              return accumulator;
             }
             const neutral = (accumulator, currentValue) => {
-              if (currentValue.result.score === 0) {
-                return accumulator + 1;
+              if (currentValue.result.comparative === 0) {
+                return accumulator + 0.5;
               }
-              return 0;
+              return accumulator;
             }
-            state.positive[i] = data.suburbs[suburb].reduce(positive, 0);
-            state.neutral[i] = data.suburbs[suburb].reduce(neutral, 0);
+
+            state.positive[i] = data.suburbs[suburb].reduce(positive, 1);
+            state.neutral[i] = data.suburbs[suburb].reduce(neutral, 1);
             state.negative[i] = Math.abs(data.suburbs[suburb].reduce(negative, 0));
+            if (suburb === 'Jimboomba') {
+              console.log(data.suburbs[suburb]);
+            }
             if (data.suburbs[suburb].length) {
-              console.log(`news for ${suburb} loaded`);
+              // console.log(`news for ${suburb} loaded`);
+
               insertNews(data.suburbs[suburb]);
               // add news item to feed
             }
@@ -211,27 +250,32 @@ function ready () {
     });
 
     socket.on('traffic', function (data) {
-      console.log('traffic', data);
+      updateTime();
       if (state.labels && state.labels.length) {
-        for (let i = 0; i < state.labels.length; i++) {
-          const suburb = state.labels[i];
+        state.labels.forEach(suburb => {
+          const index = state.labels.indexOf(suburb);
           if (data.traffic[suburb]) {
-            state.traffic[i] = data.traffic[suburb].length;
+            state.traffic[index] = data.traffic[suburb].length;
             insertNews(data.traffic[suburb]);
+            // const found = state.traffic[index].find(element => element.id === )
+          } else {
+            state.traffic[index] = [];
           }
-        }
+        });
+        drawChart();
       }
-      drawChart();
+
     });
     socket.on('search', function (data) {
-      state.labels = Object.keys(data.suburbs);
+      updateTime();
       const searchTerms = [];
       if (state.labels.length && !data.suburbs.length) {
         for (let i = 0; i < state.labels.length; i++) {
           const suburb = state.labels[i];
-          if (data.suburbs[suburb].length) {
+          // console.log(data.suburbs);
+          if (data.suburbs[suburb] && data.suburbs[suburb].length) {
             const time = new Date();
-            state.search[i] = data.suburbs[suburb].length;
+            state.search[i] = data.suburbs[suburb].length || 0;
             searchTerms.push({
               search: 'Trend event',
               title: `Someone has recently searched for the following term(s): ${data.suburbs[suburb].join(', ')}`,
@@ -241,9 +285,11 @@ function ready () {
 
           }
         }
+      } else {
+        console.log(data);
+        state.labels = data.suburbs;
       }
       insertNews(searchTerms);
-      console.log('search data', data);
       drawChart();
     });
 

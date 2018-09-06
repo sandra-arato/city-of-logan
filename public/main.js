@@ -204,6 +204,7 @@ function ready () {
     var socket = io.connect('http://localhost:3000');
     socket.on('news', function (data) {
       updateTime();
+      console.log('news data', data);
       if (state.labels && state.labels.length) {
 
         for (let i = 0; i < state.labels.length; i++) {
@@ -251,6 +252,7 @@ function ready () {
 
     socket.on('traffic', function (data) {
       updateTime();
+      console.log('traffic data', data);
       if (state.labels && state.labels.length) {
         state.labels.forEach(suburb => {
           const index = state.labels.indexOf(suburb);
@@ -268,6 +270,7 @@ function ready () {
     });
     socket.on('search', function (data) {
       updateTime();
+      console.log('search done', data);
       const searchTerms = [];
       if (state.labels.length && !data.suburbs.length) {
         for (let i = 0; i < state.labels.length; i++) {

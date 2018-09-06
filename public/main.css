@@ -16,6 +16,7 @@ canvas {
 	background: #fbfbfb;
 	border-right: 1px solid #efefef;
 	min-height: 100vh;
+	max-width: 74%;
 }
 
 .header {
